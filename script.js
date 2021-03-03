@@ -15,11 +15,9 @@ filtersContainer.addEventListener('input', (e) => {
 
 const buttonContainer = document.querySelector('.btn-container');
 function highlightButton(button) {
-  console.log(button);
-  [...buttonContainer.children].forEach((btn) => {
-    console.log(btn);
-    btn === button ? btn.classList.add('btn-active') : btn.classList.remove('btn-active');
-  });
+  [...buttonContainer.children].forEach((btn) =>
+    btn === button ? btn.classList.add('btn-active') : btn.classList.remove('btn-active')
+  );
 }
 
 // Reset button
