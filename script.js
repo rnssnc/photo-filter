@@ -13,6 +13,15 @@ filtersContainer.addEventListener('input', (e) => {
   handleInputChange(e.target);
 });
 
+const buttonContainer = document.querySelector('.btn-container');
+function highlightButton(button) {
+  console.log(button);
+  [...buttonContainer.children].forEach((btn) => {
+    console.log(btn);
+    btn === button ? btn.classList.add('btn-active') : btn.classList.remove('btn-active');
+  });
+}
+
 // Reset button
 const resetButton = document.querySelector('.btn-reset');
 
@@ -22,6 +31,8 @@ function resetInputValues() {
     else input.value = 0;
     handleInputChange(input);
   });
+
+  highlightButton(resetButton);
 }
 
 resetButton.addEventListener('click', resetInputValues);
@@ -68,24 +79,26 @@ async function changePicture() {
     image.src = img.src;
   };
   i++;
+
+  highlightButton(nextPicButton);
 }
 
 nextPicButton.addEventListener('click', changePicture);
 
 // Load picture button
-const loadPicButton = document.querySelector('.btn-load--input');
+const loadPicButton = document.querySelector('.btn-load');
+const loadPicInput = document.querySelector('.btn-load--input');
 
 function loadPicture(e) {
-  console.log(loadPicButton.files[0]);
   let reader = new FileReader();
 
   reader.onloadend = function () {
     image.src = reader.result;
   };
 
-  if (loadPicButton.files[0]) {
-    reader.readAsDataURL(loadPicButton.files[0]);
-  }
+  if (loadPicInput.files[0]) reader.readAsDataURL(loadPicInput.files[0]);
+
+  highlightButton(loadPicButton);
 }
 
 loadPicButton.addEventListener('change', loadPicture);
@@ -124,6 +137,8 @@ function downloadPicture() {
     link.download = 'image.jpg';
     link.click();
   });
+
+  highlightButton(downloadPicButton);
 }
 
 downloadPicButton.addEventListener('click', downloadPicture);
