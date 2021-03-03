@@ -17,9 +17,7 @@ filtersContainer.addEventListener('input', (e) => {
 const resetButton = document.querySelector('.btn-reset');
 
 function resetInputValues() {
-  this.classList.add('btn-active');
   filtersContainer.querySelectorAll('input').forEach((input) => {
-    console.log(input.name);
     if (input.name == 'saturate') input.value = 100;
     else input.value = 0;
     handleInputChange(input);
@@ -91,6 +89,44 @@ function loadPicture(e) {
 }
 
 loadPicButton.addEventListener('change', loadPicture);
+
+// Download picture button
+const downloadPicButton = document.querySelector('.btn-save');
+
+function drawImage() {
+  return new Promise((resolve, reject) => {
+    let canvas = document.createElement('canvas');
+    const img = new Image();
+    img.setAttribute('crossOrigin', 'anonymous');
+    img.src = image.src;
+    img.onload = function () {
+      canvas.width = img.width;
+      canvas.height = img.height;
+
+      const ctx = canvas.getContext('2d');
+      let filters = '';
+      filtersContainer.querySelectorAll('input').forEach((input) => {
+        filters += `${input.name}(${input.value}${input.dataset.sizing}) `;
+      });
+      ctx.filter = filters.trim();
+      ctx.drawImage(img, 0, 0);
+
+      resolve(canvas);
+    };
+  });
+}
+
+function downloadPicture() {
+  drawImage().then((canvas) => {
+    const dataURL = canvas.toDataURL('image/jpeg');
+    const link = document.createElement('a');
+    link.href = dataURL;
+    link.download = 'image.jpg';
+    link.click();
+  });
+}
+
+downloadPicButton.addEventListener('click', downloadPicture);
 
 // Fullscreen
 const fullScreenButon = document.querySelector('.fullscreen');

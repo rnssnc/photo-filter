@@ -121,7 +121,7 @@ output {
   transition: 0.3s;
 }
 .btn:not(.btn-active):hover {
-  background-color: #515961; 
+  background-color: #515961;
 }
 .btn:active {
   background-color: #00c9b7;
@@ -165,7 +165,7 @@ output {
   --invert: 0%;
   --sepia: 0%;
   --saturate: 100%;
-  --hue: 0deg;
+  --hue-rotate: 0deg;
 }
 img {
   height: 100%;
@@ -173,9 +173,8 @@ img {
   max-height: 520px;
   max-width: 830px;
   object-fit: contain;
-  filter: blur(var(--blur, 0px)) invert(var(--invert, 0%))
-    sepia(var(--sepia, 0%)) saturate(var(--saturate, 100%))
-    hue-rotate(var(--hue, 0deg));
+  filter: blur(var(--blur, 0px)) invert(var(--invert, 0%)) sepia(var(--sepia, 0%))
+    saturate(var(--saturate, 100%)) hue-rotate(var(--hue-rotate, 0deg));
 }
 .fullscreen {
   position: fixed;
