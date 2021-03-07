@@ -96,6 +96,7 @@ function loadPicture(e) {
 
   if (loadPicInput.files[0]) reader.readAsDataURL(loadPicInput.files[0]);
 
+  loadPicInput.value = '';
   highlightButton(loadPicButton);
 }
 
