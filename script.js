@@ -96,7 +96,7 @@ function loadPicture(e) {
 
   if (loadPicInput.files[0]) reader.readAsDataURL(loadPicInput.files[0]);
 
-  loadPicInput.value = '';
+  loadPicInput.value = null;
   highlightButton(loadPicButton);
 }
 
@@ -115,15 +115,13 @@ function drawImage() {
       canvas.width = img.width;
       canvas.height = img.height;
 
-      const sizeScaling = 5 * ((img.width / image.width + img.height / image.height) / 2);
-
       const ctx = canvas.getContext('2d');
       let filters = '';
       filtersContainer.querySelectorAll('input').forEach((input) => {
-        if (input.name === 'blur')
+        if (input.name === 'blur') {
+          const sizeScaling = input.value * ((img.width / image.width + img.height / image.height) / 2);
           filters += `${input.name}(${sizeScaling}${input.dataset.sizing}) `;
-
-        filters += `${input.name}(${input.value}${input.dataset.sizing}) `;
+        } else filters += `${input.name}(${input.value}${input.dataset.sizing}) `;
       });
       ctx.filter = filters.trim();
       ctx.drawImage(img, 0, 0);
