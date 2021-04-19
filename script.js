@@ -4,7 +4,7 @@ function handleInputChange(element) {
   element.nextElementSibling.textContent = element.value;
   document.documentElement.style.setProperty(
     `--${element.name}`,
-    `${element.value}${element.dataset.sizing}`
+    `${element.value}${element.dataset.sizing}`,
   );
 }
 
@@ -16,7 +16,7 @@ filtersContainer.addEventListener('input', (e) => {
 const buttonContainer = document.querySelector('.btn-container');
 function highlightButton(button) {
   [...buttonContainer.children].forEach((btn) =>
-    btn === button ? btn.classList.add('btn-active') : btn.classList.remove('btn-active')
+    btn === button ? btn.classList.add('btn-active') : btn.classList.remove('btn-active'),
   );
 }
 
@@ -25,8 +25,7 @@ const resetButton = document.querySelector('.btn-reset');
 
 function resetInputValues() {
   filtersContainer.querySelectorAll('input').forEach((input) => {
-    if (input.name == 'saturate') input.value = 100;
-    else input.value = 0;
+    input.value = input.defaultValue;
     handleInputChange(input);
   });
 
@@ -36,12 +35,14 @@ function resetInputValues() {
 resetButton.addEventListener('click', resetInputValues);
 
 // Next picture button
-const image = document.querySelector('img');
+const image = document.querySelector('.editor img');
 
 const nextPicButton = document.querySelector('.btn-next');
 
 function getCurrentFolder() {
-  const currentTime = new Date().getHours() + 1;
+  const currentTime = new Date().getHours();
+  // return ['night', 'morning', 'day', 'evening']
+
   switch (true) {
     case currentTime < 6:
       return 'night';
@@ -56,7 +57,7 @@ function getCurrentFolder() {
 
 async function getImageNames(time) {
   return await fetch(
-    `https://api.github.com/repos/rolling-scopes-school/stage1-tasks/contents/images/${time}?ref=assets`
+    `https://api.github.com/repos/rolling-scopes-school/stage1-tasks/contents/images/${time}?ref=assets`,
   )
     .then((response) => response.json())
     .then((items) => items.filter((item) => item.type === 'file'));
@@ -117,12 +118,14 @@ function drawImage() {
 
       const ctx = canvas.getContext('2d');
       let filters = '';
+
       filtersContainer.querySelectorAll('input').forEach((input) => {
         if (input.name === 'blur') {
           const sizeScaling = input.value * ((img.width / image.width + img.height / image.height) / 2);
           filters += `${input.name}(${sizeScaling}${input.dataset.sizing}) `;
         } else filters += `${input.name}(${input.value}${input.dataset.sizing}) `;
       });
+
       ctx.filter = filters.trim();
       ctx.drawImage(img, 0, 0);
 
@@ -133,11 +136,12 @@ function drawImage() {
 
 function downloadPicture() {
   drawImage().then((canvas) => {
-    const dataURL = canvas.toDataURL('image/jpeg');
+    const dataURL = canvas.toDataURL('image/png');
     const link = document.createElement('a');
     link.href = dataURL;
-    link.download = 'image.jpg';
+    link.download = 'image.png';
     link.click();
+    link.delete;
   });
 
   highlightButton(downloadPicButton);
